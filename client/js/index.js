@@ -11,3 +11,6 @@ socket.on('disconnect', function () {
 socket.on('sendEmail', function (email) {
     console.log(email);
 });
+socket.on('replayEmail', function (email) {
+    console.log(email);
+});

@@ -13,10 +13,8 @@ IO.on('connect', (socket)=> {
     socket.on('disconnect', () => {
         console.log('client disconnected');
     });
-    socket.on('sendEmail', (email) => {
-        console.log(email);
-    });
-    socket.emit('sendEmail', { from: 'sivarasan', Text: 'hai how are you'});
+    socket.emit('sendEmail', 'welcome to chat app');
+    socket.broadcast.emit('sendEmail', 'new user joined');
 });
 
 app.use(express.static(publicPath));
