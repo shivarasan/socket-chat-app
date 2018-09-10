@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
-const { generateMessage } = require('./utils/message');
+const { generateMessage, generateLocationMessage } = require('./utils/message');
 
 const publicPath =  path.join(__dirname, '../client');
 const port = process.env.PORT || 3000;
@@ -17,8 +17,12 @@ IO.on('connect', (socket)=> {
     socket.emit('sendEmail', generateMessage('admin', 'welcome to chat app'));
     socket.broadcast.emit('sendEmail', generateMessage('admin', 'new user joined to chat app'));
     socket.on('createEmail', function (obj) {
-        socket.emit('sendEmail', obj);
-    })
+        IO.emit('sendEmail', obj);
+    });
+    socket.on('createLocation', function (obj) {
+        console.log(obj);
+        IO.emit('sendLocation', generateLocationMessage('admin', obj.latitute,obj.longitute));
+    });
 });
 
 app.use(express.static(publicPath));
