@@ -9,10 +9,18 @@ socket.on('disconnect', function () {
 });
 
 socket.on('sendEmail', function (email) {
-    console.log(email);
-    var li = jQuery('<li></li>');
-    li.text(`${email.from}:${email.text} ${moment(email.createdAt).format('h:mm a')}`);
-    jQuery('#messages').append(li);
+    const formatedTime = moment(email.createdAt).format('h:mm a');
+    const template = jQuery('#message-template').html();
+    const html = Mustache.render(template, {
+        text: email.text,
+        from: email.from,
+        createdAt: formatedTime
+    });
+    jQuery('#messages').append(html);
+    // console.log(email);
+    // var li = jQuery('<li></li>');
+    // li.text(`${email.from}:${email.text} ${moment(email.createdAt).format('h:mm a')}`);
+    // jQuery('#messages').append(li);
 });
 socket.on('replayEmail', function (email) {
     console.log(email);
@@ -31,13 +39,21 @@ jQuery('#message-form').on('submit', function (e) {
 });
 
 socket.on('sendLocation', function (msg) {
-    var li = jQuery('<li></li>');
-    var a = jQuery('<a target="_blank">My Current Location</a>');
-    li.text(`${msg.from}:`);
-    a.attr('href', msg.message);
-    li.append(a);
-    li.append(`${moment(msg.createdAt).format('h:mm a')}`);
-    jQuery('#messages').append(li);
+    const formatedTime = moment(msg.createdAt).format('h:mm a');
+    const template = jQuery('#location-message-template').html();
+    const html = Mustache.render(template, {
+        url: msg.message,
+        from: msg.from,
+        createdAt: formatedTime
+    });
+    jQuery('#messages').append(html);
+    // var li = jQuery('<li></li>');
+    // var a = jQuery('<a target="_blank">My Current Location</a>');
+    // li.text(`${msg.from}:`);
+    // a.attr('href', msg.message);
+    // li.append(a);
+    // li.append(`${moment(msg.createdAt).format('h:mm a')}`);
+    // jQuery('#messages').append(li);
 
 });
 var sendLocation = jQuery('#send-location');
