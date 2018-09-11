@@ -28,6 +28,14 @@ socket.on('disconnect', function () {
   console.log("server disconnect");
 });
 
+socket.on('updatedUserList', function (users) {
+    const ol = jQuery('<ol></ol>');
+    users.forEach(function (user) {
+        ol.append(jQuery('<li></li>').text(user));
+    });
+    jQuery('#users').html(ol);
+});
+
 socket.on('sendEmail', function (email) {
     const formatedTime = moment(email.createdAt).format('h:mm a');
     const template = jQuery('#message-template').html();
@@ -52,7 +60,6 @@ jQuery('#message-form').on('submit', function (e) {
     e.preventDefault();
     let sendMessage= jQuery('[name=message]');
     socket.emit('createEmail',{
-        from: 'user',
         text: sendMessage.val()
     }, function () {
         sendMessage.val('');
