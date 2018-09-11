@@ -16,8 +16,9 @@ IO.on('connect', (socket)=> {
     });
     socket.emit('sendEmail', generateMessage('admin', 'welcome to chat app'));
     socket.broadcast.emit('sendEmail', generateMessage('admin', 'new user joined to chat app'));
-    socket.on('createEmail', function (obj) {
+    socket.on('createEmail', (obj, callback) => {
         IO.emit('sendEmail', obj);
+        callback();
     });
     socket.on('createLocation', function (obj) {
         console.log(obj);

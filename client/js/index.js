@@ -18,13 +18,16 @@ socket.on('replayEmail', function (email) {
     console.log(email);
 });
 
+
 jQuery('#message-form').on('submit', function (e) {
     e.preventDefault();
+    let sendMessage= jQuery('[name=message]');
     socket.emit('createEmail',{
         from: 'user',
-        text: jQuery('[name=message]').val()
+        text: sendMessage.val()
+    }, function () {
+        sendMessage.val('');
     });
-
 });
 
 socket.on('sendLocation', function (msg) {
@@ -41,15 +44,18 @@ sendLocation.on('click', function () {
     if(!navigator.geolocation) {
         return alert('your brower doesn\'t support to geolocation');
     }
+    sendLocation.attr('disabled', 'disabled').text('Sending Location');
     navigator.geolocation.getCurrentPosition(function (position) {
         console.log(position);
         socket.emit('createLocation',{
             latitute: position.coords.latitude,
             longitute: position.coords.longitude,
         });
+        sendLocation.removeAttr('disabled').text('Send Location');
 
     }, function () {
       alert('unable to access the location');
+      sendLocation.removeAttr('disabled').text('Send Location');
     })
 
 });
