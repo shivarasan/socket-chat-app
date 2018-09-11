@@ -1,4 +1,18 @@
 var socket = io();
+
+function scrollToBotten() {
+    const messages = jQuery('#messages');
+    const newMessage = messages.children('li:last-child');
+    const clientHeight = messages.prop('clientHeight');
+    const scrollTop = messages.prop('scrollTop');
+    const scrollHeight = messages.prop('scrollHeight');
+    const newMessageHeight = newMessage.innerHeight();
+    const lastMessageHeight = newMessage.prev().innerHeight();
+
+    if(clientHeight + scrollTop + newMessageHeight+ lastMessageHeight >= scrollHeight) {
+        messages.scrollTop(scrollHeight);
+    }
+}
 socket.on('connect', function ()  {
     console.log(" server socket connected");
     socket.emit('sendEmail', { text:'sivarasan', from: 'dsf@gmail.com'})
@@ -17,6 +31,7 @@ socket.on('sendEmail', function (email) {
         createdAt: formatedTime
     });
     jQuery('#messages').append(html);
+    scrollToBotten();
     // console.log(email);
     // var li = jQuery('<li></li>');
     // li.text(`${email.from}:${email.text} ${moment(email.createdAt).format('h:mm a')}`);
@@ -47,6 +62,7 @@ socket.on('sendLocation', function (msg) {
         createdAt: formatedTime
     });
     jQuery('#messages').append(html);
+    scrollToBotten();
     // var li = jQuery('<li></li>');
     // var a = jQuery('<a target="_blank">My Current Location</a>');
     // li.text(`${msg.from}:`);
