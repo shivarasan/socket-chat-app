@@ -14,8 +14,14 @@ function scrollToBotten() {
     }
 }
 socket.on('connect', function ()  {
-    console.log(" server socket connected");
-    socket.emit('sendEmail', { text:'sivarasan', from: 'dsf@gmail.com'})
+    const params = jQuery.deparam(window.location.search);
+    socket.emit('Join', params, function (err) {
+        if(err) {
+            alert(err);
+            window.location.href = '/';
+        }
+
+    })
 });
 
 socket.on('disconnect', function () {
