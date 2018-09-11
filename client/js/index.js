@@ -11,7 +11,7 @@ socket.on('disconnect', function () {
 socket.on('sendEmail', function (email) {
     console.log(email);
     var li = jQuery('<li></li>');
-    li.text(`${email.from}:${email.text}`);
+    li.text(`${email.from}:${email.text} ${moment(email.createdAt).format('h:mm a')}`);
     jQuery('#messages').append(li);
 });
 socket.on('replayEmail', function (email) {
@@ -36,6 +36,7 @@ socket.on('sendLocation', function (msg) {
     li.text(`${msg.from}:`);
     a.attr('href', msg.message);
     li.append(a);
+    li.append(`${moment(msg.createdAt).format('h:mm a')}`);
     jQuery('#messages').append(li);
 
 });
